@@ -87,7 +87,7 @@ public class gestaoEstoque extends javax.swing.JFrame {
         btnLimpar.setText("LIMPAR");
         getContentPane().add(btnLimpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 450, -1, -1));
 
-        btnCalcular.setText("CALCULAR");
+        btnCalcular.setText("CONFIRMAR");
         btnCalcular.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCalcularActionPerformed(evt);
