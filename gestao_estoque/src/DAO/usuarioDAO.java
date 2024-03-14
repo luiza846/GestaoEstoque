@@ -9,7 +9,8 @@ import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 
 public class usuarioDAO {
-
+    
+    PreparedStatement pstm;
     Connection conn;
 
     //metodo autenticacaoUsuario
@@ -36,6 +37,21 @@ public class usuarioDAO {
     }
 
     public usuarioDAO() {
+    }
+    
+    public ResultSet listarPrioridade(){
+        conn = new conexaoDAO().conectaBD();
+        String sql = "select * from prioridade order by id_prioridade;";
+        
+        try {
+            
+            pstm = conn.prepareStatement(sql);
+            return pstm.executeQuery();
+            
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar prioridade"+erro.getMessage());
+            return null;
+        }
     }
 
 }

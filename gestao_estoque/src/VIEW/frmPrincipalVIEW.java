@@ -5,7 +5,10 @@
 package VIEW;
 
 import DAO.estoqueDAO;
+import DAO.usuarioDAO;
 import DTO.estoqueDTO;
+import java.awt.Color;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -31,17 +34,15 @@ public class frmPrincipalVIEW extends javax.swing.JFrame {
 
         jLabel4 = new javax.swing.JLabel();
         txtEndereco2 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         txtEstoqueDiario = new javax.swing.JTextField();
         txtMediaDemanda = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         btnCadastrar = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         txtSomaDemandaAtendida = new javax.swing.JTextField();
         txtDemandaTotal = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         txtPrioridade = new javax.swing.JTextField();
+        btnLimpar = new javax.swing.JButton();
+        cbxPrioridade = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
 
         jLabel4.setText("Demanda Total");
 
@@ -49,13 +50,13 @@ public class frmPrincipalVIEW extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("Estoque Diario:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, 89, -1));
-        getContentPane().add(txtEstoqueDiario, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 134, -1));
-        getContentPane().add(txtMediaDemanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, 134, -1));
-
-        jLabel2.setText("Soma Demanda Atendida:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, -1, -1));
+        txtEstoqueDiario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEstoqueDiarioActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtEstoqueDiario, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, 400, 30));
+        getContentPane().add(txtMediaDemanda, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 400, 30));
 
         btnCadastrar.setText("CADASTRAR");
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
@@ -63,44 +64,71 @@ public class frmPrincipalVIEW extends javax.swing.JFrame {
                 btnCadastrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 460, -1, -1));
+        getContentPane().add(btnCadastrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 520, -1, -1));
+        getContentPane().add(txtSomaDemandaAtendida, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 220, 400, 30));
+        getContentPane().add(txtDemandaTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, 400, 30));
+        getContentPane().add(txtPrioridade, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 520, 134, -1));
 
-        jLabel3.setText("Demanda Total");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 290, -1, -1));
+        btnLimpar.setText("LIMPAR");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLimpar, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 520, 100, -1));
 
-        jLabel5.setText("Média Demanda");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, -1, -1));
-        getContentPane().add(txtSomaDemandaAtendida, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 160, 134, -1));
-        getContentPane().add(txtDemandaTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 134, -1));
+        cbxPrioridade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
+        getContentPane().add(cbxPrioridade, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 440, 320, 30));
 
-        jLabel6.setText("Prioridade:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 390, -1, -1));
-        getContentPane().add(txtPrioridade, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 430, 134, -1));
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGES/principal.png"))); // NOI18N
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 600));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void restaurarDadosComboBoxPrioridade(){
+        //COLOCAR O CODIGO DE BUSCA NO BANCO DE DADOS
+        try {
+            usuarioDAO objusuariodao = new usuarioDAO();
+            //ResultSet rs = objusuariodao.listarPrioridade();
+        } catch (Exception e) {
+        }
+    }
+    
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        
+
         String mediaDemanda, estoqueDiario, demandaTotal, somaDemAtendido, prioridade;
-        
+
         mediaDemanda = txtMediaDemanda.getText();
         estoqueDiario = txtEstoqueDiario.getText();
         demandaTotal = txtDemandaTotal.getText();
         somaDemAtendido = txtSomaDemandaAtendida.getText();
         prioridade = txtPrioridade.getText();
-        
+
         estoqueDTO objestoqueDTO = new estoqueDTO();
         objestoqueDTO.setMedia_demanda(mediaDemanda);
         objestoqueDTO.setEstoque_diario(estoqueDiario);
         objestoqueDTO.setDemanda_total(demandaTotal);
         objestoqueDTO.setSoma_dem_atendido(somaDemAtendido);
         objestoqueDTO.setPrioridade(prioridade);
-        
+
         estoqueDAO objestoqueDAO = new estoqueDAO();
         //chamar o metodo do funcionarioDAO
         objestoqueDAO.cadastrarDadosEstoque(objestoqueDTO);
+        
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void txtEstoqueDiarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEstoqueDiarioActionPerformed
+
+    }//GEN-LAST:event_txtEstoqueDiarioActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        // limpar campos
+        txtDemandaTotal.setText("");
+        txtEstoqueDiario.setText("");
+        txtMediaDemanda.setText("");
+        txtSomaDemandaAtendida.setText("");
+    }//GEN-LAST:event_btnLimparActionPerformed
 
     /**
      * @param args the command line arguments
@@ -140,12 +168,10 @@ public class frmPrincipalVIEW extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JComboBox<String> cbxPrioridade;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField txtDemandaTotal;
     private javax.swing.JTextField txtEndereco2;
     private javax.swing.JTextField txtEstoqueDiario;
