@@ -38,6 +38,10 @@ def GerarProblema(n, min_tl, max_tl, min_pr, max_pr):
     min_tl = 2
     max_tl = 10
 
+    # restricao para ponto de reposicao
+    min_pr = 2
+    max_pr = 10
+    
     # gerar problema p/ tamanho lote
     for i in range(n):
         tamanho_lote.append(rd.randint(min_tl,max_tl))
@@ -50,10 +54,35 @@ def GerarProblema(n, min_tl, max_tl, min_pr, max_pr):
 
     return tamanho_lote, ponto_reposicao
 
-# Exemplo de uso:
+# tamanho lote
 min_tl = 2
 max_tl = 10
-min_pr = 0
-max_pr = 100
+
+# ponto de reposicao
+min_pr = 2
+max_pr = 10
+
+# chamar a funcao GerarProblema
 tamanho_lote, ponto_reposicao = GerarProblema(n, min_tl, max_tl, min_pr, max_pr)
 
+# funcao aptidao
+def Aptidao (tamanho_lote, ponto_reposicao, prioridade):
+
+    if(prioridade == 1):
+        # se a prioridade for nivel de atendimento
+        for tl, pr in zip(tamanho_lote, ponto_reposicao):
+            if(tl > pr):
+                print("Tamanho Lote = ",tl," Ponto de Reposição = ",pr)
+
+    if(prioridade == 2):
+        # se a prioridade for nivel de atendimento
+        for tl, pr in zip(tamanho_lote, ponto_reposicao):
+            if(tl < pr):
+                print("Aptidao: Tamanho Lote",tl," Ponto de Reposição: ",pr)
+
+# escolher a prioridade
+prioridade = int(input("Prioridade 1 = Nivel de Atendimento e Prioridade 2 = Critério Economico: "))
+
+print("\nAptidao:\n ")
+# chamar a funcao Aptidao
+Aptidao(tamanho_lote, ponto_reposicao, prioridade)
