@@ -1,6 +1,6 @@
 import math
 import random
-
+import random as rd
 
 tamanho_cromossomo = 22
 
@@ -8,6 +8,7 @@ class Cromomossomo:
     def __init__(crom):
         crom.genes = [0] * tamanho_cromossomo
 
+# calcular a funcao objetivo
 def FuncaoObjetivo(media_demanda, estoque_diario, demanda_total, soma_deman_atend, a, b, funcao_objetivo):
 
     a = 0,7
@@ -22,24 +23,37 @@ def FuncaoObjetivo(media_demanda, estoque_diario, demanda_total, soma_deman_aten
     # calcular funcao objetivo
     funcao_objetivo = (nivel_atendimento * a) + (criterio_economico * b)
 
-    return (funcao_objetivo)
+    return funcao_objetivo
 
+# tamanho do problema
+n = int(input("Tamanho do problema: "))
 
-    def InicializarCromossomo(cromossomo):
+# gerar um cromossomo de 22 genes
+def GerarProblema(n, min_tl, max_tl, min_pr, max_pr):
 
-        # gerar cromossomos aleatorios utilizando 0 e 1
-        for x in range(tamanho_cromossomo):
-            cromossomo.genes[x] = random.randint (0,1)
-            print(cromossomo.genes)
+    tamanho_lote = []
+    ponto_reposicao = []
 
-    def Aptidao()
-            # eu pensei em colocar metodos dentro dos ifs, se a prioridade for NA, entao ao gerar numeros aleatorios, o TL tera que ser maior que PR 
+    # restricao para tamanho lote (minimo 2 e maximo 10)
+    min_tl = 2
+    max_tl = 10
 
-            # se a prioridade for nivel de atendimento
-            if(prioridade == 1):
-                if(tamanho_lote > ponto_reposicao):
-                     
+    # gerar problema p/ tamanho lote
+    for i in range(n):
+        tamanho_lote.append(rd.randint(min_tl,max_tl))
+    print("Cromossomo Tamanho Lote: ",tamanho_lote)
 
-            # se a prioridade for criterio economico
-            if(prioridade == 2):
-                if(tamanho_lote < ponto_reposicao):
+    # gerar problema p/ ponto de reposicao
+    for i in range(n):
+        ponto_reposicao.append(rd.randint(min_pr,max_pr))
+    print("Cromossomo Ponto de Reposicao: ",ponto_reposicao)
+
+    return tamanho_lote, ponto_reposicao
+
+# Exemplo de uso:
+min_tl = 2
+max_tl = 10
+min_pr = 0
+max_pr = 100
+tamanho_lote, ponto_reposicao = GerarProblema(n, min_tl, max_tl, min_pr, max_pr)
+
