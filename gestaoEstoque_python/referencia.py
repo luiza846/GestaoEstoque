@@ -1,55 +1,75 @@
-# calcular a funcao objetivo
-def FuncaoObjetivo(media_demanda, estoque_diario, demanda_total, soma_deman_atendido):
+import tkinter as tk
+from PIL import Image, ImageTk
 
-    a = 0.7
-    b = 0.3
+class GestaoEstoqueApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Gestão de Estoque")
+        self.root.geometry("800x600")
 
-    # calcular o criterio economico
-    criterio_economico = math.exp((math.log((10 ** -3) / (10 * media_demanda)) * estoque_diario))
+        # Carregar a imagem de fundo
+        imagem_fundo = Image.open("C:/Users/analu/OneDrive - Fatec Centro Paula Souza/5º PERÍODO/Programação Linear/GestaoEstoque/gestaoEstoque_python/interfaceI.png")
+        imagem_fundo = imagem_fundo.resize((800, 600))
+        imagem_fundo_tk = ImageTk.PhotoImage(imagem_fundo)
 
-    # calcular o nivel de atendimento
-    nivel_atendimento = soma_deman_atendido/demanda_total
+        # Exibir a imagem de fundo em um widget de lona
+        self.canvas = tk.Canvas(root, width=800, height=600)
+        self.canvas.pack(fill="both", expand=True)
+        self.canvas.create_image(0, 0, anchor="nw", image=imagem_fundo_tk)
+        self.canvas.imagem_fundo_tk = imagem_fundo_tk
 
-    # calcular funcao objetivo
-    funcao_objetivo = (nivel_atendimento * a) + (criterio_economico * b)
+        # Frame para os campos com cor de fundo transparente
+        self.frame_campos = tk.Frame(self.canvas, bd=0, highlightthickness=0)
+        self.frame_campos.place(relx=0.88, rely=0.5, anchor="e")
 
-    return funcao_objetivo
+        # Campos
+        self.label_media_demanda = tk.Label(self.frame_campos, text="Média de Demanda Diária:")
+        self.label_media_demanda.grid(row=0, column=0, padx=(0, 3), pady=5, sticky="e")
+        self.entry_media_demanda = tk.Entry(self.frame_campos)
+        self.entry_media_demanda.grid(row=0, column=1, padx=(3, 0), pady=5, sticky="w")
 
-def confirmar():
-    # Obter os valores digitados pelo usuário
-    media_demanda = float(media_demanda_entry.get())
-    estoque_medio = float(estoque_medio_entry.get())
-    demanda_total = float(demanda_total_entry.get())
-    soma_demanda_atendido = float(soma_demanda_atendido_entry.get())
+        self.label_estoque_medio = tk.Label(self.frame_campos, text="Estoque Médio Diário:")
+        self.label_estoque_medio.grid(row=1, column=0, padx=(0, 3), pady=5, sticky="e")
+        self.entry_estoque_medio = tk.Entry(self.frame_campos)
+        self.entry_estoque_medio.grid(row=1, column=1, padx=(3, 0), pady=5, sticky="w")
 
-    # Criar uma nova janela com as informações digitadas
-    nova_janela = tk.Toplevel(root)
-    nova_janela.title("Informações Digitadas")
+        self.label_demanda_total = tk.Label(self.frame_campos, text="Demanda Total:")
+        self.label_demanda_total.grid(row=2, column=0, padx=(0, 3), pady=5, sticky="e")
+        self.entry_demanda_total = tk.Entry(self.frame_campos)
+        self.entry_demanda_total.grid(row=2, column=1, padx=(3, 0), pady=5, sticky="w")
 
-    # Definir as dimensões da nova janela
-    largura_nova_janela = 800
-    altura_nova_janela = 600
+        self.label_soma_atendido = tk.Label(self.frame_campos, text="Soma de Demanda Atendido:")
+        self.label_soma_atendido.grid(row=3, column=0, padx=(0, 3), pady=5, sticky="e")
+        self.entry_soma_atendido = tk.Entry(self.frame_campos)
+        self.entry_soma_atendido.grid(row=3, column=1, padx=(3, 0), pady=5, sticky="w")
 
-    # Definir a geometria da nova janela com a posição centralizada
-    nova_janela.geometry(f"{largura_nova_janela}x{altura_nova_janela}")
+        # Frame para os botões
+        self.frame_botoes = tk.Frame(self.canvas, bd=0, highlightthickness=0)
+        self.frame_botoes.place(relx=0.88, rely=0.8, anchor="e")
 
-    # Obter as dimensões da tela
-    largura_tela = nova_janela.winfo_screenwidth()
-    altura_tela = nova_janela.winfo_screenheight()
+        # Botões
+        self.botao_gerar_problema = tk.Button(self.frame_botoes, text="Gerar Problema", command=self.gerar_problema)
+        self.botao_gerar_problema.pack(side=tk.RIGHT, padx=3)
 
-    # Calcular a posição para centralizar a nova janela
-    pos_x = (largura_tela - largura_nova_janela) // 2
-    pos_y = (altura_tela - altura_nova_janela) // 2
+        self.botao_solucao_inicial = tk.Button(self.frame_botoes, text="Solução Inicial", command=self.solucao_inicial)
+        self.botao_solucao_inicial.pack(side=tk.RIGHT, padx=3)
 
-    # Centralizar a nova janela
-    nova_janela.geometry(f"{largura_nova_janela}x{altura_nova_janela}+{pos_x}+{pos_y}")
+        self.botao_avalia = tk.Button(self.frame_botoes, text="Avalia", command=self.avalia)
+        self.botao_avalia.pack(side=tk.RIGHT, padx=3)
 
-    # Adicionar rótulos com as informações digitadas
-    tk.Label(nova_janela, text="Média de Demanda: " + str(media_demanda)).pack()
-    tk.Label(nova_janela, text="Estoque Médio: " + str(estoque_medio)).pack()
-    tk.Label(nova_janela, text="Demanda Total: " + str(demanda_total)).pack()
-    tk.Label(nova_janela, text="Soma de Demanda Atendido: " + str(soma_demanda_atendido)).pack()
-    funcao_objetivo = FuncaoObjetivo(media_demanda, estoque_medio, demanda_total, soma_demanda_atendido)
-    tk.Label(nova_janela, text="Função Objetivo: " + str(funcao_objetivo)).pack()
+    def gerar_problema(self):
+        # Implemente a lógica para gerar o problema aqui
+        pass
 
-# O restante do seu código permanece inalterado
+    def solucao_inicial(self):
+        # Implemente a lógica para a solução inicial aqui
+        pass
+
+    def avalia(self):
+        # Implemente a lógica para avaliação aqui
+        pass
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = GestaoEstoqueApp(root)
+    root.mainloop()

@@ -24,7 +24,7 @@ def FuncaoObjetivo(media_demanda, estoque_diario, demanda_total, soma_deman_aten
     return funcao_objetivo
 
 
-"""                        INTERFACE                           """
+"""                        INTERFACE - GERADO PELO CHAT GPT                 """
 
 def confirmar():
 
@@ -118,7 +118,7 @@ soma_demanda_atendido_entry = tk.Entry(frame, width=28)
 soma_demanda_atendido_entry.place(relx=pos_x / largura, rely=0.65, anchor='e')
 
 # Criar o botão de confirmar dentro do frame
-confirmar_button = tk.Button(frame, text="Confirmar", command=confirmar, width=23, bg="#758094", fg="white")
+confirmar_button = tk.Button(frame, text="Gerar problema", command=confirmar, width=23, bg="#758094", fg="white")
 confirmar_button.place(relx=pos_x / largura, rely=0.75, anchor='e')
 
 root.mainloop()
