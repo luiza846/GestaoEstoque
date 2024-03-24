@@ -48,26 +48,32 @@ class GestaoEstoqueApp:
         self.frame_botoes.place(relx=0.88, rely=0.8, anchor="e")
 
         # Botões
-        self.botao_gerar_problema = tk.Button(self.frame_botoes, text="Gerar Problema", command=self.gerar_problema)
+        self.botao_gerar_problema = tk.Button(self.frame_botoes, text="Gerar Problema", command=self.criar_janela_gerar_problema)
         self.botao_gerar_problema.pack(side=tk.RIGHT, padx=3)
 
-        self.botao_solucao_inicial = tk.Button(self.frame_botoes, text="Solução Inicial", command=self.solucao_inicial)
+        self.botao_solucao_inicial = tk.Button(self.frame_botoes, text="Solução Inicial", command=self.criar_janela_solucao_inicial)
         self.botao_solucao_inicial.pack(side=tk.RIGHT, padx=3)
 
-        self.botao_avalia = tk.Button(self.frame_botoes, text="Avalia", command=self.avalia)
+        self.botao_avalia = tk.Button(self.frame_botoes, text="Avalia", command=self.criar_janela_avalia)
         self.botao_avalia.pack(side=tk.RIGHT, padx=3)
 
-    def gerar_problema(self):
+    def criar_janela_gerar_problema(self):
+        janela_gerar_problema = tk.Toplevel(self.root)
+        janela_gerar_problema.title("Gerar Problema")
+        janela_gerar_problema.geometry("800x600")
         # Implemente a lógica para gerar o problema aqui
-        pass
 
-    def solucao_inicial(self):
+    def criar_janela_solucao_inicial(self):
+        janela_solucao_inicial = tk.Toplevel(self.root)
+        janela_solucao_inicial.title("Solução Inicial")
+        janela_solucao_inicial.geometry("800x600")
         # Implemente a lógica para a solução inicial aqui
-        pass
 
-    def avalia(self):
+    def criar_janela_avalia(self):
+        janela_avalia = tk.Toplevel(self.root)
+        janela_avalia.title("Avalia")
+        janela_avalia.geometry("800x600")
         # Implemente a lógica para avaliação aqui
-        pass
 
 if __name__ == "__main__":
     root = tk.Tk()
