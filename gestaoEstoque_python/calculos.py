@@ -13,8 +13,6 @@ soma_dem_atend = 60
 estoque_diario = 50
 media_demanda = 10
 demanda_total = 200
-a = 1.0
-b = 1.0
 
 
 class Cromomossomo:

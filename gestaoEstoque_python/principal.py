@@ -1,7 +1,33 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+import math
+import random
+import random as rd
+
+"""                         CALCULOS                           """
+
+# calcular a funcao objetivo
+def FuncaoObjetivo(media_demanda, estoque_diario, demanda_total, soma_deman_atendido):
+
+    a = 0.7
+    b = 0.3
+
+    # calcular o criterio economico
+    criterio_economico = math.exp((math.log((10 ** -3) / (10 * media_demanda)) * estoque_diario))
+
+    # calcular o nivel de atendimento
+    nivel_atendimento = soma_deman_atendido/demanda_total
+
+    # calcular funcao objetivo
+    funcao_objetivo = (nivel_atendimento * a) + (criterio_economico * b)
+
+    return funcao_objetivo
+
+
+"""                        INTERFACE                           """
 
 def confirmar():
+
     # Obter os valores digitados pelo usuário
     media_demanda = float(media_demanda_entry.get())
     estoque_medio = float(estoque_medio_entry.get())
@@ -35,6 +61,8 @@ def confirmar():
     tk.Label(nova_janela, text="Estoque Médio: " + str(estoque_medio)).pack()
     tk.Label(nova_janela, text="Demanda Total: " + str(demanda_total)).pack()
     tk.Label(nova_janela, text="Soma de Demanda Atendido: " + str(soma_demanda_atendido)).pack()
+    funcao_objetivo = FuncaoObjetivo(media_demanda, estoque_medio, demanda_total, soma_demanda_atendido)
+    tk.Label(nova_janela, text="Função Objetivo: " + str(funcao_objetivo)).pack()
 
 # Criar a janela principal
 root = tk.Tk()
@@ -56,7 +84,8 @@ pos_y = (altura_tela - altura_janela) // 2
 root.geometry(f"{largura_janela}x{altura_janela}+{pos_x}+{pos_y}")
 
 # Carregar a imagem de fundo
-imagem_fundo = Image.open("fundo.png")
+imagem_fundo = Image.open("C:/Users/analu/OneDrive - Fatec Centro Paula Souza/5º PERÍODO/Programação Linear/GestaoEstoque/gestaoEstoque_python/interfaceI.png")
+
 largura, altura = imagem_fundo.size
 
 # Criar um frame para conter os elementos da interface
@@ -93,3 +122,6 @@ confirmar_button = tk.Button(frame, text="Confirmar", command=confirmar, width=2
 confirmar_button.place(relx=pos_x / largura, rely=0.75, anchor='e')
 
 root.mainloop()
+
+
+
