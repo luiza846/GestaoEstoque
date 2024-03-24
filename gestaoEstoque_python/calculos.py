@@ -3,6 +3,19 @@ import random
 import random as rd
 
 tamanho_cromossomo = 22
+tamanho_torneio = 5
+taxa_mutacao = 0.01
+tamanho_populacao = 100
+geracoes = 100
+
+# atribuir valores (tirar depois)
+soma_dem_atend = 60
+estoque_diario = 50
+media_demanda = 10
+demanda_total = 200
+a = 1.0
+b = 1.0
+
 
 class Cromomossomo:
     def __init__(crom):
@@ -25,64 +38,111 @@ def FuncaoObjetivo(media_demanda, estoque_diario, demanda_total, soma_deman_aten
 
     return funcao_objetivo
 
-# tamanho do problema
-n = int(input("Tamanho do problema: "))
+# gerar cromossomo de 22 genes
+def InicializarCromossomo(cromossomo):
 
-# gerar um cromossomo de 22 genes
-def GerarProblema(n, min_tl, max_tl, min_pr, max_pr):
+    for x in range(tamanho_cromossomo):
+        # gerar numeros aleatorios de 1 e 0
+        cromossomo.genes[x] = random.randint(0 , 1)
 
-    tamanho_lote = []
-    ponto_reposicao = []
+    # pegar 11 primeiros genes para tamanho lote
+    tamanho_lote = cromossomo.genes[:tamanho_cromossomo // 2]
 
-    # restricao para tamanho lote (minimo 2 e maximo 10)
-    min_tl = 2
-    max_tl = 10
+    # pegar o restante de genes para ponto de reposicao
+    ponto_reposicao = cromossomo.genes[tamanho_cromossomo //2:]
 
-    # restricao para ponto de reposicao
-    min_pr = 2
-    max_pr = 10
+    print("Cromossomo: ",cromossomo.genes)
+    print("Cromossomo do Tamanho Lote: ",tamanho_lote)
+    print("Crmossomo de Ponto de Reposicao: ", ponto_reposicao)
+
+
+def Aptidao(media_demanda, tamanho_lote, ponto_reposicao):
     
-    # gerar problema p/ tamanho lote
-    for i in range(n):
-        tamanho_lote.append(rd.randint(min_tl,max_tl))
-    print("Cromossomo Tamanho Lote: ",tamanho_lote)
+    # se o tamanho lote for menor que 2 x demanda media ou maior 10 x demanda media 
+    if tamanho_lote < 2 * media_demanda or 10 * media_demanda:
+        return -9999
+    
+    if ponto_reposicao < 2 * media_demanda or 10 * media_demanda:
+        return -9999
+    
+def SelecaoTorneio(populacao):
 
-    # gerar problema p/ ponto de reposicao
-    for i in range(n):
-        ponto_reposicao.append(rd.randint(min_pr,max_pr))
-    print("Cromossomo Ponto de Reposicao: ",ponto_reposicao)
+    torneio = random.sample(populacao, tamanho_torneio)
+    vencedor = torneio[0]
+    melhor_aptidao = Aptidao(vencedor, media_demanda)
+    for cromossomo in torneio[1:]:
+        atual_vencedor = Aptidao(cromossommo, media_demanda)
+        if atual_vencedor > melhor_aptidao:
+            melhor_aptidao = atual_vencedor
+            vencedor = cromossommo
 
-    return tamanho_lote, ponto_reposicao
+    return vencedor
 
-# tamanho lote
-min_tl = 2
-max_tl = 10
+# realizar o cruzamento
+def Crossover(pai1, pai2):
 
-# ponto de reposicao
-min_pr = 2
-max_pr = 10
+    filho = Cromomossomo()
+    ponto_cruzamento = random.randint(0, tamanho_cromossomo)
+    for x in range(tamanho_cromossomo):
+        filho.genes[x] = pai1.genes[x] if x < ponto_cruzamento else pai2.genes[x]
 
-# chamar a funcao GerarProblema
-tamanho_lote, ponto_reposicao = GerarProblema(n, min_tl, max_tl, min_pr, max_pr)
+    print("Pai (1): ",pai1)
+    print("Pai (2): ",pai2)
+    print("Filho: ",filho)
 
-# funcao aptidao
-def Aptidao (tamanho_lote, ponto_reposicao, prioridade):
+    return filho
 
-    if(prioridade == 1):
-        # se a prioridade for nivel de atendimento
-        for tl, pr in zip(tamanho_lote, ponto_reposicao):
-            if(tl > pr):
-                print("Tamanho Lote = ",tl," Ponto de Reposição = ",pr)
+def Mutacao(cromossomo):
+    for x in range(tamanho_cromossomo):
+        if random.random() < taxa_mutacao:
+            # trocar bit
+            cromossommo.genes[x] = 1 - cromossommo.genes[x]
 
-    if(prioridade == 2):
-        # se a prioridade for nivel de atendimento
-        for tl, pr in zip(tamanho_lote, ponto_reposicao):
-            if(tl < pr):
-                print("Aptidao: Tamanho Lote",tl," Ponto de Reposição: ",pr)
+# criar uma populacao
+populacao = [Cromomossomo() for _ in range(tamanho_populacao)]
+for cromossomo in populacao:
+    InicializarCromossomo(cromossommo)
 
-# escolher a prioridade
-prioridade = int(input("Prioridade 1 = Nivel de Atendimento e Prioridade 2 = Critério Economico: "))
+# criar geracoes
+for geracao in range(geracoes):
+    # chamar as funcoes como torneio, crossover etc
+    nova_populacao = []
+    for _ in range(tamanho_populacao):
+        pai1 = SelecaoTorneio(populacao)
+        pai2 = SelecaoTorneio(populacao)
+        filho = Crossover(pai1,pai2)
+        Mutacao(filho)
+        nova_populacao.append(filho)
+    # atualizar nova populacao
+        populacao = nova_populacao
 
-print("\nAptidao:\n ")
+# melhor cromossomo
+melhor_cromossomo = populacao[0]
+melhor_aptidao = Aptidao(media_demanda, tamanho_lote, ponto_reposicao)
+for cromossomo in populacao[1:]:
+    atual_aptidao = Aptidao(media_demanda, tamanho_lote, ponto_reposicao)
+    if atual_aptidao > melhor_aptidao:
+        melhor_aptidao = atual_aptidao
+        melhor_aptidao = cromossommo
+
+ponto_reposicao = 0
+tamanho_lote = 0
+for x in range(tamanho_cromossomo //2):
+    ponto_reposicao += melhor_cromossomo.genes[x] * (2 ** (tamanho_cromossomo // 2 - 1 - x))
+for x in range(tamanho_cromossomo // 2, tamanho_cromossomo):
+    tamanho_lote += melhor_cromossomo.genes[x] * (2 ** (tamanho_cromossomo - 1 - x))
+
+# avaliacao
+print("Melhor ponto de reposição:", ponto_reposicao)
+print("Melhor tamanho de lote:", tamanho_lote)
+print("Melhor valor da função objetivo:", best_fitness)
+
+
+# instanciar a classe Cromossomo
+cromossommo = Cromomossomo()
+
+# chamar a funcao Inicializar Cromossomo
+InicializarCromossomo(cromossommo)
+
 # chamar a funcao Aptidao
-Aptidao(tamanho_lote, ponto_reposicao, prioridade)
+Crossover(cromossommo)
